@@ -20,7 +20,7 @@ import scala.concurrent.{Await, Future}
   */
 object SQSService {
   implicit val system = ActorSystem.create("sqsmock")
-  val queueCache = mutable.Map[String, mutable.Queue[Message]]("http://localhost:8001/876119091332/foo" -> mutable.Queue())
+  val queueCache = mutable.Map[String, mutable.Queue[Message]]()
   def run(account:Long) = {
     implicit val mat = ActorMaterializer()
     val http = Http(system)
