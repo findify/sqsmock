@@ -14,6 +14,6 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "2.2.5" % "test"
 )
 
-licenses += ("WTFPL", url("http://www.wtfpl.net/txt/copying/"))
+licenses += ("MIT", url("https://opensource.org/licenses/MIT"))
 
 bintrayOrganization := Some("findify")
