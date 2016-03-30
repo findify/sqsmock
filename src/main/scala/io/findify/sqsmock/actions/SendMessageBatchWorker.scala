@@ -4,14 +4,14 @@ import akka.actor.ActorSystem
 import akka.event.slf4j.Logger
 import akka.http.scaladsl.model.{HttpResponse, StatusCodes}
 import io.findify.sqsmock.messages.{ErrorResponse, SendMessageBatchResponse, SendMessageResponse}
-import io.findify.sqsmock.model.{Message, MessageBatchEntry}
+import io.findify.sqsmock.model.{Message, MessageBatchEntry, QueueCache}
 
 import scala.collection.mutable
 
 /**
   * Created by shutty on 3/30/16.
   */
-class SendMessageBatchWorker(account:Long, queues:mutable.Map[String,mutable.Queue[Message]], system:ActorSystem) extends Worker {
+class SendMessageBatchWorker(account:Long, queues:mutable.Map[String,QueueCache], system:ActorSystem) extends Worker {
   val log = Logger(this.getClass, "send_message_batch_worker")
   val fieldFormat = """SendMessageBatchRequestEntry\.([0-9]+)\.([0-9A-Za-z\.]+)""".r
   def process(fields:Map[String,String]) = {
@@ -29,7 +29,7 @@ class SendMessageBatchWorker(account:Long, queues:mutable.Map[String,mutable.Que
         .values.toList
         .flatMap(MessageBatchEntry(_))
       log.debug(s"pushing ${msgs.size} messages to queue")
-      msgs.foreach(entry => queue.enqueue(entry.message))
+      queue.enqueue(msgs.map(_.message))
       HttpResponse(StatusCodes.OK, entity = SendMessageBatchResponse(msgs).toXML.toString())
     }
     result.getOrElse {
