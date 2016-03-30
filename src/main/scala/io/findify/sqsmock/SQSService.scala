@@ -50,6 +50,10 @@ object SQSService {
     Await.result(http.bindAndHandle(route2, "localhost", 8001), Duration.Inf)
   }
 
+  def shutdown:Unit = {
+    Await.result(system.terminate(), Duration.Inf)
+  }
+
   def main(args: Array[String]) {
     run(123)
     Await.result(system.whenTerminated, Duration.Inf)
