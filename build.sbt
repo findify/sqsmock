@@ -8,10 +8,12 @@ scalaVersion := "2.11.8"
 
 libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-stream" % "2.4.2",
+  "com.typesafe.akka" %% "akka-slf4j" % "2.4.2",
   "com.typesafe.akka" %% "akka-http-experimental" % "2.4.2",
   "org.scala-lang.modules" %% "scala-xml" % "1.0.5",
   "com.github.nscala-time" %% "nscala-time" % "2.10.0",
-  "org.scalatest" %% "scalatest" % "2.2.5" % "test"
+  "org.scalatest" %% "scalatest" % "2.2.5" % "test",
+  "com.amazonaws" % "aws-java-sdk-sqs" % "1.10.62" % "test"
 )
 
 licenses += ("MIT", url("https://opensource.org/licenses/MIT"))

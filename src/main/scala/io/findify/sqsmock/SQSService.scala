@@ -2,6 +2,7 @@ package io.findify.sqsmock
 
 import akka.actor.ActorSystem
 import akka.event.Logging
+import akka.event.slf4j.Logger
 import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
 import akka.http.scaladsl.model._
@@ -20,32 +21,33 @@ import scala.concurrent.{Await, Future}
   */
 object SQSService {
   implicit val system = ActorSystem.create("sqsmock")
-  val queueCache = mutable.Map[String, mutable.Queue[Message]]()
-  def run(account:Long) = {
+  def run(account:Long):Unit = {
+    val log = Logger(system.getClass, "sqs_client")
+
     implicit val mat = ActorMaterializer()
     val http = Http(system)
-    val createQueueWorker = new CreateQueueWorker(account, queueCache)
-    val sendMessageWorker = new SendMessageWorker(account, queueCache)
-    val receiveMessageWorker = new ReceiveMessageWorker(account, queueCache)
+    val backend = new SQSBackend(account, system)
     val route2 =
-      logRequest("request", Logging.InfoLevel) {
-        path("") {
-          post {
-            formFieldMap { fields =>
-              complete {
-                fields.get("Action") match {
-                  case Some("SendMessage") => sendMessageWorker.process(fields)
-                  case Some("ReceiveMessage") => receiveMessageWorker.process(fields)
-                  case Some("CreateQueue") => createQueueWorker.process(fields)
-                  case _ => HttpResponse(StatusCodes.BadRequest, entity = ErrorResponse("Sender", "InvalidParameterValue", "queue not found").toXML.toString())
+      logRequest("request", Logging.DebugLevel) {
+        pathPrefix(IntNumber) { accountId =>
+          path(Segment) { queueName =>
+            post {
+              formFieldMap { fields =>
+                complete {
+                  backend.process(fields + ("QueueUrl" -> s"http://localhost:8001/$account/$queueName"))
                 }
               }
             }
           }
+        } ~ post {
+          formFieldMap { fields =>
+            complete {
+              backend.process(fields)
+            }
+          }
         }
       }
-
-    http.bindAndHandle(route2, "localhost", 8001)
+    Await.result(http.bindAndHandle(route2, "localhost", 8001), Duration.Inf)
   }
 
   def main(args: Array[String]) {
