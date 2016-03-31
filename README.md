@@ -1,5 +1,7 @@
 # SQS mock library for Java/Scala
 
+[![Build Status](https://travis-ci.org/shuttie/sqsmock.svg?branch=master)](https://travis-ci.org/shuttie/sqsmock)
+
 Sqsmock is a web service implementing AWS SQS API, which can be used for local testing of your code using SQS
 but without hitting real SQS endpoints.
 
