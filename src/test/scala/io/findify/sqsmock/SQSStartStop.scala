@@ -1,5 +1,6 @@
 package io.findify.sqsmock
 
+import com.amazonaws.auth.AnonymousAWSCredentials
 import com.amazonaws.services.sqs.AmazonSQSClient
 import org.scalatest.{BeforeAndAfterAll, FlatSpec}
 
@@ -12,7 +13,7 @@ trait SQSStartStop extends FlatSpec with BeforeAndAfterAll {
   override def beforeAll = {
     sqs = new SQSService(8001, 123)
     sqs.start()
-    client = new AmazonSQSClient()
+    client = new AmazonSQSClient(new AnonymousAWSCredentials())
     client.setEndpoint("http://localhost:8001")
   }
   override def afterAll = {

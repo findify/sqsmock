@@ -45,7 +45,8 @@ Scala:
     api.start()
 
     // AWS SQS client setup
-    val client = new AmazonSQSClient()
+    val credentials = new AnonymousAWSCredentials()
+    val client = new AmazonSQSClient(credentials)
     client.setEndpoint("http://localhost:8001")
 
     // use it as usual
@@ -55,16 +56,17 @@ Scala:
 Java:
 
     // create and start SQS API mock
-    SQSService api = new SQSService(8001, 1)
-    api.start()
+    SQSService api = new SQSService(8001, 1);
+    api.start();
 
     // AWS SQS client setup
-    AmazonSQSClient client = new AmazonSQSClient()
-    client.setEndpoint("http://localhost:8001")
+    AWSCredentials credentials = new AnonymousAWSCredentials();
+    AmazonSQSClient client = new AmazonSQSClient(credentials);
+    client.setEndpoint("http://localhost:8001");
 
     // use it as usual
-    String queue = client.createQueue("hello").getQueueUrl()
-    client.sendMessage(queue, "world")
+    String queue = client.createQueue("hello").getQueueUrl();
+    client.sendMessage(queue, "world");
 
 ## License
 
