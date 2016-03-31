@@ -19,22 +19,21 @@ import scala.concurrent.{Await, Future}
 /**
   * Created by shutty on 3/29/16.
   */
-object SQSService {
+class SQSService(port:Int, account:Int = 1) {
   implicit val system = ActorSystem.create("sqsmock")
-  def run(account:Long):Unit = {
+  def start():Unit = {
     val log = Logger(system.getClass, "sqs_client")
-
     implicit val mat = ActorMaterializer()
     val http = Http(system)
-    val backend = new SQSBackend(account, system)
-    val route2 =
+    val backend = new SQSBackend(account, port, system)
+    val route =
       logRequest("request", Logging.DebugLevel) {
         pathPrefix(IntNumber) { accountId =>
           path(Segment) { queueName =>
             post {
               formFieldMap { fields =>
                 complete {
-                  backend.process(fields + ("QueueUrl" -> s"http://localhost:8001/$account/$queueName"))
+                  backend.process(fields + ("QueueUrl" -> s"http://localhost:${port}/$account/$queueName"))
                 }
               }
             }
@@ -47,15 +46,17 @@ object SQSService {
           }
         }
       }
-    Await.result(http.bindAndHandle(route2, "localhost", 8001), Duration.Inf)
+    Await.result(http.bindAndHandle(route, "localhost", 8001), Duration.Inf)
   }
 
-  def shutdown:Unit = {
-    Await.result(system.terminate(), Duration.Inf)
-  }
+  def shutdown():Unit = Await.result(system.terminate(), Duration.Inf)
+  def block():Unit = Await.result(system.whenTerminated, Duration.Inf)
+}
 
+object SQSService {
   def main(args: Array[String]) {
-    run(123)
-    Await.result(system.whenTerminated, Duration.Inf)
+    val sqs = new SQSService(8001, 1)
+    sqs.start()
+    sqs.block
   }
 }

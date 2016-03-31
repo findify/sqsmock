@@ -12,10 +12,10 @@ import scala.collection.mutable
 /**
   * Created by shutty on 3/30/16.
   */
-class SQSBackend(account:Long, system:ActorSystem) {
+class SQSBackend(account:Long, port:Int, system:ActorSystem) {
   val log = Logger(this.getClass, "sqs_backend")
   val queueCache = mutable.Map[String, QueueCache]()
-  val createQueueWorker = new CreateQueueWorker(account, queueCache, system)
+  val createQueueWorker = new CreateQueueWorker(account, port, queueCache, system)
   val sendMessageWorker = new SendMessageWorker(account, queueCache, system)
   val receiveMessageWorker = new ReceiveMessageWorker(account, queueCache, system)
   val sendMessageBatchWorker = new SendMessageBatchWorker(account, queueCache, system)

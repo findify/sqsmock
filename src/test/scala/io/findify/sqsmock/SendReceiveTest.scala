@@ -1,15 +1,13 @@
 package io.findify.sqsmock
 
 import com.amazonaws.services.sqs.AmazonSQSClient
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.{BeforeAndAfterAll, FlatSpec, Matchers}
+
 import scala.collection.JavaConversions._
 /**
   * Created by shutty on 3/30/16.
   */
-class SendReceiveTest extends FlatSpec with Matchers {
-  SQSService.run(123)
-  val client = new AmazonSQSClient()
-  client.setEndpoint("http://localhost:8001")
+class SendReceiveTest extends FlatSpec with Matchers with SQSStartStop {
   val queue = "http://localhost:8001/123/foo"
   "sqs mock" should "create queue" in {
     val response = client.createQueue("foo")

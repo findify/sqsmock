@@ -11,7 +11,7 @@ import scala.collection.mutable
 /**
   * Created by shutty on 3/29/16.
   */
-class CreateQueueWorker(account:Long, queues:mutable.Map[String,QueueCache], system:ActorSystem) extends Worker {
+class CreateQueueWorker(account:Long, port:Int, queues:mutable.Map[String,QueueCache], system:ActorSystem) extends Worker {
   val log = Logger(this.getClass, "create_queue_worker")
 
 
@@ -22,6 +22,7 @@ class CreateQueueWorker(account:Long, queues:mutable.Map[String,QueueCache], sys
       val q = Queue(
         account,
         queueName,
+        port,
         visibilityTimeout = fields.getOrElse("VisibilityTimeout", "30").toInt
       )
       log.debug(s"Creating queue $q, url=${q.url}")
