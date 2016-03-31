@@ -19,3 +19,5 @@ libraryDependencies ++= Seq(
 licenses += ("MIT", url("https://opensource.org/licenses/MIT"))
 
 bintrayOrganization := Some("findify")
+
+parallelExecution in Test := false
