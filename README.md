@@ -18,7 +18,7 @@ Sqsmock package is available for Scala 2.11 (on Java 8). To install using SBT, a
  statements to your `build.sbt`:
 
     resolvers += Resolver.bintrayRepo("findify", "maven")
-    libraryDependencies += "io.findify" %% "sqsmock" % "0.3.1" % "test",
+    libraryDependencies += "io.findify" %% "sqsmock" % "0.3.2" % "test",
 
 On maven, update your `pom.xml` in the following way:
 
@@ -32,7 +32,7 @@ On maven, update your `pom.xml` in the following way:
     <dependency>
         <groupId>io.findify</groupId>
         <artifactId>sqsmock_2.11</artifactId>
-        <version>0.3.1</version>
+        <version>0.3.2</version>
         <type>pom</type>
         <scope>test</scope>
     </dependency>
