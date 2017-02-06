@@ -6,12 +6,14 @@ organization := "io.findify"
 
 scalaVersion := "2.11.8"
 
-val akkaVersion = "2.4.9"
+crossScalaVersions := Seq("2.11.8", "2.12.1")
+
+val akkaVersion = "2.4.16"
 
 libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-stream" % akkaVersion,
   "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
-  "com.typesafe.akka" %% "akka-http-experimental" % akkaVersion,
+  "com.typesafe.akka" %% "akka-http" % "10.0.3",
   "org.scala-lang.modules" %% "scala-xml" % "1.0.5",
   "joda-time" % "joda-time" % "2.9.4",
   "org.scalatest" %% "scalatest" % "3.0.0" % "test",
