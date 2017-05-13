@@ -17,13 +17,24 @@ import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 import scala.collection.JavaConversions._
 
+object SQSService {
+  def main(args: Array[String]) {
+    val sqs = new SQSService(8001, 1)
+    sqs.start()
+    sqs.block
+  }
+
+  val config = ConfigFactory.parseMap(Map("akka.http.parsing.illegal-header-warnings" -> "off"))
+}
+
 /**
   * Created by shutty on 3/29/16.
   */
-class SQSService(port:Int, account:Int = 1) {
-  val config = ConfigFactory.parseMap(Map("akka.http.parsing.illegal-header-warnings" -> "off"))
-  implicit val system = ActorSystem.create("sqsmock", config)
-  def start():Unit = {
+class SQSService(port:Int, account:Int = 1)(implicit system: ActorSystem = ActorSystem.create("sqsmock", SQSService.config)) {
+
+  private var bind: Http.ServerBinding = _
+
+  def start() = {
     val log = Logger(system.getClass, "sqs_client")
     implicit val mat = ActorMaterializer()
     val http = Http(system)
@@ -48,17 +59,10 @@ class SQSService(port:Int, account:Int = 1) {
           }
         }
       }
-    Await.result(http.bindAndHandle(route, "localhost", 8001), Duration.Inf)
+    bind = Await.result(http.bindAndHandle(route, "localhost", port), Duration.Inf)
+    bind
   }
 
-  def shutdown():Unit = Await.result(system.terminate(), Duration.Inf)
+  def stop():Unit = Await.result(system.terminate(), Duration.Inf)
   def block():Unit = Await.result(system.whenTerminated, Duration.Inf)
-}
-
-object SQSService {
-  def main(args: Array[String]) {
-    val sqs = new SQSService(8001, 1)
-    sqs.start()
-    sqs.block
-  }
 }
