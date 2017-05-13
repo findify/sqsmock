@@ -1,6 +1,5 @@
 package io.findify.sqsmock
 
-import com.amazonaws.services.sqs.AmazonSQSClient
 import com.amazonaws.services.sqs.model.{ReceiveMessageRequest, SendMessageBatchRequestEntry}
 import org.scalatest._
 
