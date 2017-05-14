@@ -9,7 +9,8 @@ import io.findify.sqsmock.model.{DeleteMessageBatchEntry, MessageBatchEntry, Que
 import scala.collection.mutable
 
 /**
-  * Created by shutty on 3/30/16.
+  * Handle DeleteQueue request.
+  * @since May 14 2017.
   */
 class DeleteMessageBatchWorker(account:Long, queues:mutable.Map[String,QueueCache], system:ActorSystem) extends Worker {
 
