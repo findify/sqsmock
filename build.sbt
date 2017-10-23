@@ -4,9 +4,11 @@ version := "0.3.3-SNAPSHOT"
 
 organization := "io.findify"
 
-scalaVersion := "2.12.2"
+scalaVersion := "2.12.3"
 
 val akkaVersion = "2.5.1"
+
+crossScalaVersions := Seq("2.12.3", "2.11.8")
 
 libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-stream" % akkaVersion,
