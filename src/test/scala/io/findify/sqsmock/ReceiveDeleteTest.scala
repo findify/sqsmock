@@ -1,8 +1,7 @@
 package io.findify.sqsmock
 
-import com.amazonaws.services.sqs.AmazonSQSClient
 import com.amazonaws.services.sqs.model.CreateQueueRequest
-import org.scalatest.{BeforeAndAfterAll, FlatSpec, Matchers}
+import org.scalatest.{FlatSpec, Matchers}
 
 import scala.collection.JavaConversions._
 /**
