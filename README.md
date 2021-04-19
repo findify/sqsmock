@@ -1,6 +1,9 @@
 # SQS mock library for Java/Scala
 
 [![Build Status](https://travis-ci.org/shuttie/sqsmock.svg?branch=master)](https://travis-ci.org/shuttie/sqsmock)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.findify/sqsmock_2.12/badge.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/io.findify/sqsmock_2.12)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+
 
 Sqsmock is a web service implementing AWS SQS API, which can be used for local testing of your code using SQS
 but without hitting real SQS endpoints.
@@ -14,25 +17,20 @@ Implemented API methods:
 
 ## Installation
 
-Sqsmock package is available for Scala 2.11 (on Java 8). To install using SBT, add these
+Sqsmock package is available for Scala 2.12 (on Java 8) on Maven Central. To install using SBT, add these
  statements to your `build.sbt`:
 
-    resolvers += Resolver.bintrayRepo("findify", "maven")
-    libraryDependencies += "io.findify" %% "sqsmock" % "0.3.2" % "test",
+    libraryDependencies += "io.findify" %% "sqsmock" % "0.4.0" % "test",
 
 On maven, update your `pom.xml` in the following way:
 
     // add this entry to <repositories/>
-    <repository>
-      <id>findify</id>
-      <url>https://dl.bintray.com/findify/maven/</url>
-    </repository>
 
     // add this entry to <dependencies/>
     <dependency>
         <groupId>io.findify</groupId>
-        <artifactId>sqsmock_2.11</artifactId>
-        <version>0.3.2</version>
+        <artifactId>sqsmock_2.12</artifactId>
+        <version>0.4.0</version>
         <type>pom</type>
         <scope>test</scope>
     </dependency>
