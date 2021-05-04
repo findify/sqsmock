@@ -1,6 +1,7 @@
 package io.findify.sqsmock
 
 import com.amazonaws.services.sqs.AmazonSQSClient
+import com.amazonaws.services.sqs.model.ReceiveMessageRequest
 import org.scalatest.{BeforeAndAfterAll, FlatSpec, Matchers}
 
 import scala.collection.JavaConversions._
@@ -24,5 +25,16 @@ class SendReceiveTest extends FlatSpec with Matchers with SQSStartStop {
   it should "detect empty queue" in {
     val result = client.receiveMessage(queue)
     assert(result.getMessages.isEmpty)
+  }
+  it should "dequeue a number of messages according to a `MaxNumberOfMessages` parameter" in {
+    client.sendMessage(queue, "message1")
+    client.sendMessage(queue, "message2")
+    val receiveMessageRequest = new ReceiveMessageRequest(queue).withMaxNumberOfMessages(1)
+    val result1 = client.receiveMessage(receiveMessageRequest)
+    assert(result1.getMessages.size == 1)
+    val result2 = client.receiveMessage(receiveMessageRequest)
+    assert(result2.getMessages.size == 1)
+    val result3 = client.receiveMessage(receiveMessageRequest)
+    assert(result3.getMessages.size == 0)
   }
 }

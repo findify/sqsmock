@@ -22,7 +22,7 @@ class QueueCache(params:Queue) {
     msg
   }
   def dequeue(count:Int):List[ReceivedMessage] = {
-    (0 to count).flatMap(_ => dequeue).toList
+    (0 until count).flatMap(_ => dequeue).toList
   }
   def delete(handle:String) = received.get(handle) match {
     case Some(lease) =>
