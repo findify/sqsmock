@@ -48,7 +48,7 @@ class SQSService(port:Int, account:Int = 1) {
           }
         }
       }
-    Await.result(http.bindAndHandle(route, "localhost", 8001), Duration.Inf)
+    Await.result(http.bindAndHandle(route, "localhost", port), Duration.Inf)
   }
 
   def shutdown():Unit = Await.result(system.terminate(), Duration.Inf)
